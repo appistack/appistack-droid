@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 import com.voxxel.voxxel.R;
 
-public class Signup extends ActionBarActivity {
+public class SignupActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
