@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class User extends BaseResponse {
 
-    private String id;
+    private Integer id;
     private String username;
     private String email;
     private String uid;
