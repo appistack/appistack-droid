@@ -3,7 +3,8 @@ package com.voxxel.api;
 import retrofit.http.*;
 
 public interface LoginService {
-    @POST("/auth") //signup
+    //user signup
+    @POST("/auth")
     User auth();
 
     @POST("/auth/sign_in")
