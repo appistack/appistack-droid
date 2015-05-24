@@ -14,4 +14,25 @@ public class Artist extends BaseResponse {
     private String description;
     private String headshot;
 
+    //TODO: sounds as Sound[] ??
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getHeadshot() {
+        return headshot;
+    }
 }
