@@ -2,6 +2,8 @@ package com.voxxel.voxxel;
 
 //https://futurestud.io/blog/retrofit-getting-started-and-android-client/
 //https://futurestud.io/blog/android-basic-authentication-with-retrofit/
+//Retrofit examples: https://github.com/square/retrofit/tree/master/samples
+//Retrofit Oauth: https://github.com/bkiers/retrofit-oauth/tree/master/src/main/java/nl/bigo/retrofitoauth
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

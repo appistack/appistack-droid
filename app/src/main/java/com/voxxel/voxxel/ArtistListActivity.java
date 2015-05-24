@@ -35,13 +35,13 @@ public class ArtistListActivity extends ListActivity {
 //        setContentView(R.layout.activity_artist_list);
 
         ListView listView = (ListView) findViewById(R.id.listView);
-        listView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView adapter, View v, int position) {
-                ItemClicked item = adapter.getItem(position);
-                Intent intent = new Intent(Activity.this, destinationActivity.class);
-            }
-        });
+//        listView.setOnItemClickListener(new OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView adapter, View v, int position) {
+//                ItemClicked item = adapter.getItem(position);
+//                Intent intent = new Intent(Activity.this, destinationActivity.class);
+//            }
+//        });
 
     }
 
