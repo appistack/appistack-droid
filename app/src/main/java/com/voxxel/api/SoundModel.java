@@ -2,7 +2,7 @@ package com.voxxel.api;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Sound extends BaseResponse {
+public class SoundModel extends BaseResponse {
     private Integer id;
 
     @SerializedName("artist_id")

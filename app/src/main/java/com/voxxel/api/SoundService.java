@@ -5,8 +5,8 @@ import retrofit.http.*;
 
 public interface SoundService {
     @GET("/sounds")
-    List<Sound> getSounds();
+    List<SoundModel> getSounds();
 
     @GET("/sounds/{id}")
-    Sound getSound(@Path("id") int id);
+    SoundModel getSound(@Path("id") int id);
 }

@@ -5,8 +5,8 @@ import retrofit.http.*;
 
 public interface UserService {
     @GET("/users")
-    List<User> getUser();
+    List<UserModel> getUser();
 
     @GET("/users/{id}")
-    User getUser(@Path("id") int id);
+    UserModel getUser(@Path("id") int id);
 }

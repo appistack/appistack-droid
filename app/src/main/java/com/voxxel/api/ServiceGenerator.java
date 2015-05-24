@@ -14,7 +14,7 @@ public class ServiceGenerator {
         return createService(serviceClass, baseUrl, null);
     }
 
-    public static <S> S createService(Class<S> serviceClass, String baseUrl, final AccessToken accessToken) {
+    public static <S> S createService(Class<S> serviceClass, String baseUrl, final AccessTokenModel accessToken) {
         RestAdapter.Builder builder = new RestAdapter.Builder()
                 .setEndpoint(baseUrl)
                 .setClient(new OkClient(new OkHttpClient()));

@@ -2,7 +2,7 @@ package com.voxxel.api;
 
 import com.google.gson.annotations.SerializedName;
 
-public class AccessToken extends BaseResponse {
+public class AccessTokenModel extends BaseResponse {
 
     @SerializedName("access_token")
     private String accessToken;
@@ -36,10 +36,10 @@ public class AccessToken extends BaseResponse {
     public String toString() {
 
         if (super.getError() != null) {
-            return "AccessToken{error='" + super.getError() + "'}";
+            return "AccessTokenModel{error='" + super.getError() + "'}";
         }
 
-        return "AccessToken{" +
+        return "AccessTokenModel{" +
                 "accessToken='" + accessToken + '\'' +
                 ", tokenType='" + tokenType + '\'' +
                 ", expiresIn=" + expiresIn +

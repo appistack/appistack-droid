@@ -6,8 +6,8 @@ import retrofit.http.*;
 public interface ArtistService {
 
     @GET("/artists")
-    List<Artist> getArtists();
+    List<ArtistModel> getArtists();
 
     @GET("/artists/{id}")
-    Artist getArtist(@Path("id") int id);
+    ArtistModel getArtist(@Path("id") int id);
 }

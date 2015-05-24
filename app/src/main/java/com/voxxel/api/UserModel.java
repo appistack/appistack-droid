@@ -2,7 +2,7 @@ package com.voxxel.api;
 
 import com.google.gson.annotations.SerializedName;
 
-public class User extends BaseResponse {
+public class UserModel extends BaseResponse {
 
     private Integer id;
     private String username;

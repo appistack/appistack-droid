@@ -5,15 +5,15 @@ import retrofit.http.*;
 public interface LoginService {
     //user signup
     @POST("/auth")
-    User auth();
+    UserModel auth();
 
     @POST("/auth/sign_in")
-    AccessToken accessToken();
+    AccessTokenModel accessToken();
 
     @GET("/auth/validate_token")
-    AccessToken validateAccessToken();
+    AccessTokenModel validateAccessToken();
 
     //TODO: implement new class for signout response?
 //    @DELETE("/auth/sign_out")
-//    AccessToken signOutResponse();
+//    AccessTokenModel signOutResponse();
 }
