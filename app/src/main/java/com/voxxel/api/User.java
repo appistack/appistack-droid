@@ -13,7 +13,7 @@ public class User extends BaseResponse {
     private String description;
     private String image;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
