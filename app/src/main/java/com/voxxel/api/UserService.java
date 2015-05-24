@@ -1,7 +1,8 @@
 package com.voxxel.api;
 
-public interface UserService {
+import retrofit.http.*;
 
-    @GET('/api/v1/users')
+public interface UserService {
+    @GET("/api/v1/users")
     User[] users();
 }
