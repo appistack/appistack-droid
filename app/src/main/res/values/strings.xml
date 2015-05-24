@@ -14,4 +14,5 @@
     </string-array>
     <string name="title_activity_artist_list">ArtistListActivity</string>
     <string name="title_activity_artist_detail">ArtistDetailActivity</string>
+    <string name="title_activity_signup">Signup</string>
 </resources>

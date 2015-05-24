@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.voxxel.voxxel.R;
+import com.voxxel.api.LoginService;
+import com.voxxel.api.ServiceGenerator;
 
 /**
  * A login screen that offers login via email/password.
