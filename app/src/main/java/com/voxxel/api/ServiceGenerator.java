@@ -31,9 +31,7 @@ public class ServiceGenerator {
         }
 
         RestAdapter adapter = builder.build();
-
         return adapter.create(serviceClass);
     }
-
 
 }

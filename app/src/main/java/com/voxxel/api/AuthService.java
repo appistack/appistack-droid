@@ -2,7 +2,7 @@ package com.voxxel.api;
 
 import retrofit.http.*;
 
-public interface LoginService {
+public interface AuthService {
     //user signup
     @POST("/auth")
     UserModel auth();
