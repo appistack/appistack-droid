@@ -1,18 +1,32 @@
 package com.voxxel.voxxel;
 
-import android.support.v7.app.ActionBarActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 
-import com.voxxel.voxxel.R;
+import com.voxxel.api.AuthService;
 
-public class SignupActivity extends ActionBarActivity {
+public class SignupActivity extends AppCompatActivity {
+
+    private UserSignupTask mSignupTask = null;
+    private AutoCompleteTextView mEmailView;
+    private EditText mUsernameView;
+    private EditText mPasswordView;
+    private EditText mPasswordConfirmView;
+
+    private AuthService authService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+
     }
 
     @Override
@@ -35,5 +49,42 @@ public class SignupActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onClickSignupButton(View view) {
+        attemptSignup();
+    }
+
+    public void attemptSignup() {
+
+    }
+
+    private boolean validateInput() {
+        return false;
+    }
+
+    private boolean isPasswordValid(String password, String confirm) {
+        return (password.length() > 4) && (password.equals(confirm));
+    }
+
+    private boolean isEmailValid(String email) {
+        return email.contains("@");
+    }
+
+    public class UserSignupTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+
+        }
+
+        @Override
+        protected void onCancelled() {
+
+        }
     }
 }

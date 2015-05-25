@@ -5,13 +5,17 @@ package com.voxxel.voxxel;
 //Retrofit examples: https://github.com/square/retrofit/tree/master/samples
 //Retrofit Oauth: https://github.com/bkiers/retrofit-oauth/tree/master/src/main/java/nl/bigo/retrofitoauth
 
+// store access token as shared preferences
+// https://luthfihariz.wordpress.com/2012/04/09/shared-pref-android/
+// http://stackoverflow.com/questions/10161266/how-to-securely-store-access-token-and-secret-in-android
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -34,10 +38,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.voxxel.voxxel.R;
-import com.voxxel.api.LoginService;
-import com.voxxel.api.ServiceGenerator;
-
 /**
  * A login screen that offers login via email/password.
  */
@@ -50,6 +50,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -158,7 +159,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return (password.length() > 4);
     }
 
     /**
@@ -249,6 +250,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
+    }
+
+    public void onClickSignupButton(View view) {
+        Intent intent = new Intent(this, SignupActivity.class);
+        startActivity(intent);
     }
 
     /**
