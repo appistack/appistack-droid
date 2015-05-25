@@ -10,6 +10,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.voxxel.api.AuthService;
+import com.voxxel.api.ServiceGenerator;
+import com.voxxel.Constants;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -26,7 +28,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-
+        authService = ServiceGenerator.createService(AuthService.class, Constants.BASE_URL);
     }
 
     @Override

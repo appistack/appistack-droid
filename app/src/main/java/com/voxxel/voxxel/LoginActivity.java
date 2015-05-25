@@ -35,6 +35,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.voxxel.Constants;
+import com.voxxel.api.AuthService;
+import com.voxxel.api.ServiceGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +46,7 @@ import java.util.List;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
+    private AuthService authService;
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -66,6 +71,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        authService = ServiceGenerator.createService(AuthService.class, Constants.BASE_URL);
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
