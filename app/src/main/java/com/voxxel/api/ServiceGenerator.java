@@ -3,6 +3,7 @@ package com.voxxel.api;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
+
 import com.squareup.okhttp.OkHttpClient;
 
 public class ServiceGenerator {
