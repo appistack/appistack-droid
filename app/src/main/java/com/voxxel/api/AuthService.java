@@ -3,12 +3,17 @@ package com.voxxel.api;
 import retrofit.http.*;
 
 public interface AuthService {
-    //user signup
     @POST("/auth")
-    UserModel auth();
+    @FormUrlEncoded
+    UserModel signup(@Field("email") String email,
+                     @Field("username") String username,
+                     @Field("password") String password,
+                     @Field("password_confirmation") String passwordConfirm);
 
     @POST("/auth/sign_in")
-    AccessTokenModel accessToken();
+    @FormUrlEncoded
+    AccessTokenModel signin(@Field("email") String email,
+                            @Field("password") String password);
 
     @GET("/auth/validate_token")
     AccessTokenModel validateAccessToken();
