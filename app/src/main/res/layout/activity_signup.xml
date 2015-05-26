@@ -10,6 +10,12 @@
               android:paddingTop="@dimen/activity_vertical_margin"
               tools:context="com.voxxel.voxxel.SignupActivity">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:background="@mipmap/vox_logo"/>
+
     <ProgressBar
         android:id="@+id/signup_progress"
         style="?android:attr/progressBarStyleLarge"
@@ -17,12 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:visibility="gone"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:background="@mipmap/vox_logo"/>
 
     <ScrollView
         android:id="@+id/voxxel_signup_form"
