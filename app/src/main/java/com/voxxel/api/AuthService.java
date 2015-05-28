@@ -1,5 +1,7 @@
 package com.voxxel.api;
 
+import retrofit.Callback;
+import retrofit.client.Response;
 import retrofit.http.*;
 
 public interface AuthService {
@@ -12,8 +14,9 @@ public interface AuthService {
 
     @POST("/auth/sign_in")
     @FormUrlEncoded
-    AccessTokenModel signin(@Field("email") String email,
-                            @Field("password") String password);
+    void signin(@Field("email") String email,
+                            @Field("password") String password,
+                            Callback<Response> cb);
 
     @GET("/auth/validate_token")
     AccessTokenModel validateAccessToken();

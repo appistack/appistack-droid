@@ -18,6 +18,7 @@ public class ServiceGenerator {
     public static <S> S createService(Class<S> serviceClass, String baseUrl, final AccessTokenModel accessToken) {
         RestAdapter.Builder builder = new RestAdapter.Builder()
                 .setEndpoint(baseUrl)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setClient(new OkClient(new OkHttpClient()));
 
         if (accessToken != null) {
@@ -34,5 +35,4 @@ public class ServiceGenerator {
         RestAdapter adapter = builder.build();
         return adapter.create(serviceClass);
     }
-
 }

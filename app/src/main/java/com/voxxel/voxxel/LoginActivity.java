@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,10 +35,18 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.content.Context;
 
 import com.voxxel.Constants;
+import com.voxxel.api.AccessTokenModel;
 import com.voxxel.api.AuthService;
 import com.voxxel.api.ServiceGenerator;
+import com.voxxel.api.AuthManager;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.client.Header;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,11 +75,14 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private AuthManager authManager = AuthManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        authManager.setContext(getBaseContext());
 
         authService = ServiceGenerator.createService(AuthService.class, Constants.BASE_URL);
 
@@ -105,7 +117,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private void populateAutoComplete() {
         getLoaderManager().initLoader(0, null, this);
     }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -154,7 +165,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(this, email, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -249,7 +260,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         int IS_PRIMARY = 1;
     }
 
-
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
@@ -270,31 +280,56 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
+        private Activity mActivity;
         private final String mEmail;
         private final String mPassword;
+        private AccessTokenModel accessToken;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(Activity activity, String email, String password) {
+            mActivity = activity;
             mEmail = email;
             mPassword = password;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+                accessToken = new AccessTokenModel();
+                authService.signin(mEmail, mPassword, new Callback<Response>() {
+                    @Override
+                    public void success(Response r, Response res) {
+                        Log.i("API Auth", "Received Response");
+                        for (Header hdr : res.getHeaders()) {
+                            if (hdr.getName() != null) {
+                                switch (hdr.getName()) {
+                                    case "Access-Token": accessToken.setAccessToken(hdr.getValue()); break;
+                                    case "Token-Type": accessToken.setTokenType(hdr.getValue()); break;
+                                    case "Client": accessToken.setClient(hdr.getValue()); break;
+                                    case "Expiry": accessToken.setExpiry(hdr.getValue()); break;
+                                    case "Uid": accessToken.setUid(hdr.getValue()); break;
+                                }
+                            }
+                        }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
+                        authManager.setToken(accessToken);
+
+                        Intent intent = new Intent(mActivity, ArtistListActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError e) {
+                        mPasswordView.setError(getString(R.string.error_incorrect_password));
+                        mPasswordView.requestFocus();
+                        Log.e("API Failure", String.valueOf(e.getResponse().getStatus()));
+                        Log.e("API Failure", String.valueOf(e.getResponse().getBody()));
+                    }
+                });
+
+                //TODO: store access token
+            } catch (Exception e) {
+                Log.e("API Auth", e.toString());
+                return false;
             }
 
             // TODO: register the new account here.
@@ -305,13 +340,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
         }
 
         @Override
@@ -321,4 +349,3 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         }
     }
 }
-
