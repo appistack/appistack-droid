@@ -1,10 +1,15 @@
 package com.voxxel.voxxel;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
@@ -13,6 +18,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.voxxel.Constants;
 import com.voxxel.api.AccessTokenModel;
@@ -21,12 +27,13 @@ import com.voxxel.api.ArtistService;
 import com.voxxel.api.AuthManager;
 import com.voxxel.api.ServiceGenerator;
 
+import com.voxxel.api.SignupModel;
 import com.voxxel.voxxel.R;
 
 import java.util.Collections;
 import java.util.List;
 
-public class ArtistListActivity extends ListActivity {
+public class ArtistListActivity extends AppCompatActivity {
     static final String[] ARTISTS = new String[]{
             "Dave Chappelle",
             "Dana Carvey",
@@ -39,27 +46,30 @@ public class ArtistListActivity extends ListActivity {
             "David Conner"
     };
 
-    private List<ArtistModel> artists;
+    private List<ArtistModel> artists = Collections.emptyList();
     private ArtistService artistService;
     private AuthManager authManager = AuthManager.getInstance();
     private AccessTokenModel accessToken = authManager.retrieveToken();
+    private RequestArtistListTask artistListTask = null;
+    private ArtistListAdapter artistListAdapter = new ArtistListAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_list);
 
+        ListView listView = (ListView) findViewById(R.id.listView);
+        listView.setAdapter(artistListAdapter);
+
         if (!accessToken.isValid()) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         } else {
             artistService = ServiceGenerator.createService(ArtistService.class, Constants.BASE_URL, accessToken);
-            artists = artistService.getArtists();
-            setListAdapter(new ArrayAdapter<ArtistModel>(this, R.layout.list_artist, artists));
+            fetchArtists();
         }
 
-        ListView listView = (ListView) findViewById(R.id.listView);
-//        listView.setOnItemClickListener(new OnItemClickListener() {
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView adapter, View v, int position) {
 //                ItemClicked item = adapter.getItem(position);
@@ -90,6 +100,17 @@ public class ArtistListActivity extends ListActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void fetchArtists() {
+        if (artistListTask != null) {
+            return;
+        }
+
+        artistListTask = new RequestArtistListTask();
+        artistListTask.execute((Void) null);
+    }
+
+
 
     public class ArtistListAdapter extends BaseAdapter {
         private List<ArtistModel> artists = Collections.emptyList();
@@ -128,6 +149,38 @@ public class ArtistListActivity extends ListActivity {
             textDescription.setText(artists.get(position).getDescription());
 
             return view;
+        }
+    }
+
+    public class RequestArtistListTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                artists = artistService.getArtists();
+            } catch (Exception e) {
+                artists = Collections.emptyList();
+                Log.e("API Auth", e.toString());
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success) {
+                artistListAdapter.setArtists(artists);
+            } else {
+                Toast.makeText(getApplicationContext(), "Error loading artists", Toast.LENGTH_LONG).show();
+                artistListAdapter.setArtists(artists);
+            }
+            artistListTask = null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            artistListTask = null;
         }
     }
 }
