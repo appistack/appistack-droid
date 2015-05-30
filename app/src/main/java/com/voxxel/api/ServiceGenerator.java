@@ -26,8 +26,11 @@ public class ServiceGenerator {
                 @Override
                 public void intercept(RequestFacade request) {
                     request.addHeader("Accept", "application/json;versions=1");
-                    request.addHeader("Authorization", accessToken.getTokenType() +
-                            " " + accessToken.getAccessToken());
+                    //TODO: change access-token/token-type headers to 'Authorization' (requires changes to API)
+                    request.addHeader("access-token", accessToken.getAccessToken());
+                    request.addHeader("token-type", accessToken.getTokenType());
+                    request.addHeader("client", accessToken.getClient());
+                    request.addHeader("uid", accessToken.getUid());
                 }
             });
         }
