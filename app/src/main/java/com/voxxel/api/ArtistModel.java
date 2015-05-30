@@ -2,6 +2,8 @@ package com.voxxel.api;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class ArtistModel extends BaseResponse {
     private Integer id;
 
@@ -14,7 +16,11 @@ public class ArtistModel extends BaseResponse {
     private String description;
     private String headshot;
 
-    //TODO: sounds as SoundModel[] ??
+    private List<SoundModel> sounds;
+
+    public List<SoundModel> getSounds() {
+        return sounds;
+    }
 
     public Integer getId() {
         return id;
