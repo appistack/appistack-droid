@@ -44,5 +44,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile 'com.squareup.okhttp:mockwebserver:2.3.0'
     compile 'com.google.android.gms:play-services:7.3.0'
+    compile group:'com.squareup.picasso', name:'picasso', version:'2.3.2'
 //    compile 'com.google.android.gms:play-services-identity:7.3.0'
 }
