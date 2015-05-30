@@ -301,6 +301,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         }
 
                         authManager.setToken(accessToken);
+                        showProgress(false);
 
                         Intent intent = new Intent(mActivity, ArtistListActivity.class);
                         startActivity(intent);
@@ -310,12 +311,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     public void failure(RetrofitError e) {
                         mPasswordView.setError(getString(R.string.error_incorrect_password));
                         mPasswordView.requestFocus();
+                        showProgress(false);
                         Log.e("API Failure", String.valueOf(e.getResponse().getStatus()));
                         Log.e("API Failure", String.valueOf(e.getResponse().getBody()));
                     }
                 });
             } catch (Exception e) {
                 Log.e("API Auth", e.toString());
+                showProgress(false);
                 return false;
             }
 
@@ -325,7 +328,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
         }
 
         @Override
