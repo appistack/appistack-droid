@@ -11,7 +11,6 @@ public class AuthManager {
     private Context context;
     private static final String ACCESS_TOKEN = "ACCESS_TOKEN";
     private SharedPreferences prefs;
-    private SharedPreferences.Editor prefsEditor;
 
     private static final AuthManager instance = new AuthManager();
     private static AccessTokenModel token;
@@ -32,16 +31,16 @@ public class AuthManager {
     public void setContext(Context baseContext) {
         context = baseContext;
         prefs = context.getSharedPreferences(ACCESS_TOKEN, Activity.MODE_PRIVATE);
-        prefsEditor = prefs.edit();
     }
 
     public void setToken(AccessTokenModel newToken) {
         token = newToken;
-        prefsEditor.putString(tokenKey, token.getAccessToken()).commit();
-        prefsEditor.putString(tokenTypeKey, token.getTokenType()).commit();
-        prefsEditor.putString(tokenClientKey, token.getClient()).commit();
-        prefsEditor.putString(tokenExpiryKey, token.getExpiry()).commit();
-        prefsEditor.putString(tokenUidKey, token.getUid()).commit();
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        prefsEditor.putString(tokenKey, token.getAccessToken()).apply();
+        prefsEditor.putString(tokenTypeKey, token.getTokenType()).apply();
+        prefsEditor.putString(tokenClientKey, token.getClient()).apply();
+        prefsEditor.putString(tokenExpiryKey, token.getExpiry()).apply();
+        prefsEditor.putString(tokenUidKey, token.getUid()).apply();
     }
 
     public AccessTokenModel retrieveToken() {

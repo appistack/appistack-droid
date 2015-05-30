@@ -6,22 +6,20 @@ import retrofit.http.*;
 
 public interface AuthService {
     @POST("/auth")
-    @FormUrlEncoded
-    UserModel signup(@Field("email") String email,
-                     @Field("username") String username,
-                     @Field("password") String password,
-                     @Field("password_confirmation") String passwordConfirm);
+    @Headers("Content-Type:application/json")
+    UserModel signup(@Body SignupModel signup);
 
     @POST("/auth/sign_in")
+//    @Headers("Content-Type:application/json") //TODO: add SigninModel to implement with JSON
     @FormUrlEncoded
     void signin(@Field("email") String email,
-                            @Field("password") String password,
-                            Callback<Response> cb);
+                @Field("password") String password,
+                Callback<Response> cb);
 
     @GET("/auth/validate_token")
     AccessTokenModel validateAccessToken();
 
-    //TODO: implement new class for signout response?
-//    @DELETE("/auth/sign_out")
-//    AccessTokenModel signOutResponse();
+    @DELETE("/auth/sign_out")
+    BaseResponse signout();
+    //TODO: implement callback for signout?
 }

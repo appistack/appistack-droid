@@ -3,8 +3,10 @@ package com.voxxel.voxxel;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,12 +27,12 @@ import android.widget.EditText;
 import com.voxxel.api.AuthService;
 import com.voxxel.api.ServiceGenerator;
 import com.voxxel.Constants;
+import com.voxxel.api.SignupModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SignupActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-
     private UserSignupTask mSignupTask = null;
     private AutoCompleteTextView mEmailView;
     private EditText mUsernameView;
@@ -151,14 +154,10 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
             focusView.requestFocus();
         } else {
             showProgress(true);
-            mSignupTask = new UserSignupTask(email, username, password, passwordConfirm);
+            mSignupTask = new UserSignupTask(this, email, username, password, passwordConfirm);
             mSignupTask.execute((Void) null);
         }
 
-    }
-
-    private boolean validateInput() {
-        return false;
     }
 
     private boolean isUsernameValid(String username) {
@@ -264,13 +263,14 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     public class UserSignupTask extends AsyncTask<Void, Void, Boolean> {
-        //TODO: instantiate UserModel class instead
+        private final Activity mActivity;
         private final String mEmail;
         private final String mUsername;
         private final String mPassword;
         private final String mPasswordConfirm;
 
-        UserSignupTask(String email, String username, String password, String passwordConfirm) {
+        UserSignupTask(Activity activity, String email, String username, String password, String passwordConfirm) {
+            mActivity = activity;
             mEmail = email;
             mUsername = username;
             mPassword = password;
@@ -279,6 +279,14 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
 
         @Override
         protected Boolean doInBackground(Void... params) {
+            try {
+                SignupModel signup = new SignupModel(mEmail, mUsername, mPassword, mPasswordConfirm);
+                authService.signup(signup);
+            } catch (Exception e) {
+                Log.e("API Auth", e.toString());
+                return false;
+            }
+
             return true;
         }
 
@@ -288,6 +296,8 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
             showProgress(false);
 
             if (success) {
+                //TODO: navigate to parent activity (login) (and input username?)
+                //TODO: instruct user to confirm their account via email
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

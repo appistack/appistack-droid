@@ -53,6 +53,11 @@ public class AccessTokenModel extends BaseResponse {
         expiry = _expiry;
     }
 
+    public boolean isValid() {
+        //TODO: implement using expiry
+        return true;
+    }
+
     @Override
     public String toString() {
 //        if (super.getError() != null) {
