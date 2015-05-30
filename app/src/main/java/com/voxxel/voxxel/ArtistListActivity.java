@@ -55,6 +55,7 @@ public class ArtistListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final Activity thisActivity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_list);
 
@@ -69,14 +70,15 @@ public class ArtistListActivity extends AppCompatActivity {
             fetchArtists();
         }
 
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView adapter, View v, int position) {
-//                ItemClicked item = adapter.getItem(position);
-//                Intent intent = new Intent(Activity.this, destinationActivity.class);
-//            }
-//        });
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View v, int position, long artistId) {
+                Intent artistIntent = new Intent(thisActivity, ArtistDetailActivity.class);
+                artistIntent.putExtra("artistId", artistId);
+                Log.i("ARTIST_ID", " " + artistId);
+                startActivity(artistIntent);
+            }
+        });
     }
 
     @Override
@@ -102,6 +104,7 @@ public class ArtistListActivity extends AppCompatActivity {
     }
 
     private void fetchArtists() {
+        //TODO: remove this if API request is not a result of user interaction?
         if (artistListTask != null) {
             return;
         }
@@ -110,11 +113,8 @@ public class ArtistListActivity extends AppCompatActivity {
         artistListTask.execute((Void) null);
     }
 
-
-
     public class ArtistListAdapter extends BaseAdapter {
         private List<ArtistModel> artists = Collections.emptyList();
-        private Context context;
 
         public void setArtists(List<ArtistModel> artists) {
             this.artists = artists;

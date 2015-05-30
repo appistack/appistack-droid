@@ -298,6 +298,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
             if (success) {
                 //TODO: navigate to parent activity (login) (and input username?)
                 //TODO: instruct user to confirm their account via email
+                // - how to navigate back to parent activity?
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
