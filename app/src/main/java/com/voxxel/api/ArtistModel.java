@@ -28,6 +28,8 @@ public class ArtistModel extends BaseResponse {
         return lastName;
     }
 
+    public String getName() { return firstName + " " + lastName; }
+
     public String getDescription() {
         return description;
     }

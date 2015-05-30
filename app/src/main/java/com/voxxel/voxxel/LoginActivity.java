@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -54,7 +55,7 @@ import java.util.List;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
     private AuthService authService;
     private UserLoginTask mAuthTask = null;
 
@@ -268,7 +269,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private Activity mActivity;
+        private final Activity mActivity;
         private final String mEmail;
         private final String mPassword;
         private AccessTokenModel accessToken;
@@ -313,14 +314,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                         Log.e("API Failure", String.valueOf(e.getResponse().getBody()));
                     }
                 });
-
-                //TODO: store access token
             } catch (Exception e) {
                 Log.e("API Auth", e.toString());
                 return false;
             }
 
-            // TODO: register the new account here.
             return true;
         }
 
