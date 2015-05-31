@@ -32,7 +32,7 @@ import com.voxxel.api.SignupModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SignupActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SignupActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
     private UserSignupTask mSignupTask = null;
     private AutoCompleteTextView mEmailView;
     private EditText mUsernameView;

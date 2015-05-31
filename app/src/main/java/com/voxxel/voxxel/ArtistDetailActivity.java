@@ -10,8 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,23 +31,26 @@ import com.voxxel.voxxel.R;
 import java.util.Collections;
 import java.util.List;
 
-public class ArtistDetailActivity extends AppCompatActivity {
+public class ArtistDetailActivity extends Activity {
     private ArtistService artistService;
     private Long artistId;
     private ArtistModel artist = new ArtistModel();
     private AuthManager authManager = AuthManager.getInstance();
     private AccessTokenModel accessToken = authManager.retrieveToken();
     private RequestArtistTask artistTask = null;
+    private ArtistSoundListAdapter soundListAdapter = new ArtistSoundListAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final Activity thisActivity = this;
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-
         artistId = intent.getLongExtra("artistId", -1);
         setContentView(R.layout.activity_artist_detail);
+
+        ListView listView = (ListView) findViewById(R.id.soundList);
+        listView.setAdapter(soundListAdapter);
 
         if (!accessToken.isValid()) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -54,6 +59,16 @@ public class ArtistDetailActivity extends AppCompatActivity {
             artistService = ServiceGenerator.createService(ArtistService.class, Constants.BASE_URL, accessToken);
             fetchArtist();
         }
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View v, int position, long soundId) {
+                Intent recordIntent = new Intent(thisActivity, RecordActivity.class);
+                recordIntent.putExtra("artistId", artistId);
+                recordIntent.putExtra("soundId", soundId);
+                startActivity(recordIntent);
+            }
+        });
     }
 
     @Override
@@ -119,10 +134,11 @@ public class ArtistDetailActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
+                soundListAdapter.setSounds(artist.getSounds());
                 updateArtistView(artist);
             } else {
                 Toast.makeText(getApplicationContext(), "Error loading artist", Toast.LENGTH_LONG).show();
-//                artistListAdapter.setArtists(artists);
+                soundListAdapter.setSounds(artist.getSounds());
             }
             artistTask = null;
         }

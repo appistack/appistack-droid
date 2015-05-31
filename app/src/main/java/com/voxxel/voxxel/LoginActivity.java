@@ -37,6 +37,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.voxxel.Constants;
 import com.voxxel.api.AccessTokenModel;
@@ -55,7 +56,7 @@ import java.util.List;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private AuthService authService;
     private UserLoginTask mAuthTask = null;
 

@@ -1,6 +1,7 @@
 package com.voxxel.voxxel;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 //import android.support.v7.appcompat.R;
 import android.os.Bundle;
@@ -18,14 +19,21 @@ import android.media.AudioManager;
 import com.voxxel.voxxel.R;
 import com.voxxel.Constants;
 
-public class RecordActivity extends AppCompatActivity {
+public class RecordActivity extends Activity {
     private MediaPlayer mPlayer;
     private AudioManager aManager;
+    private Long artistId;
+    private Long soundId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+
+        Intent intent = getIntent();
+        artistId = intent.getLongExtra("artistId", -1);
+        soundId = intent.getLongExtra("soundId", -1);
+
 //        mPlayer = MediaPlayer.create(this, R.raw.sounds.arnold.get_to_the_choppa);
 //        mPlayer = initMediaPlayer();
 //        aManager = initAudioManager();

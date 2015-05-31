@@ -33,7 +33,7 @@ import com.voxxel.voxxel.R;
 import java.util.Collections;
 import java.util.List;
 
-public class ArtistListActivity extends AppCompatActivity {
+public class ArtistListActivity extends Activity {
     static final String[] ARTISTS = new String[]{
             "Dave Chappelle",
             "Dana Carvey",
@@ -75,7 +75,6 @@ public class ArtistListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView parent, View v, int position, long artistId) {
                 Intent artistIntent = new Intent(thisActivity, ArtistDetailActivity.class);
                 artistIntent.putExtra("artistId", artistId);
-                Log.i("ARTIST_ID", " " + artistId);
                 startActivity(artistIntent);
             }
         });
