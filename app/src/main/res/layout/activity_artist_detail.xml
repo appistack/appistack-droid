@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:textSize="20sp"
-        android:text="@string/record_lbl_sounds"/>
+        android:text=""/>
 
     <ListView android:id="@+id/soundList"
               android:layout_width="match_parent"

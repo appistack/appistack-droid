@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="record_lbl_sounds">Sounds</string>
+    <string name="record_btn_play">Sounds</string>
+    <string name="record_btn_record">Record</string>
+    <string name="record_btn_score">Score</string>
+    <string name="record_btn_share">Share</string>
 </resources>

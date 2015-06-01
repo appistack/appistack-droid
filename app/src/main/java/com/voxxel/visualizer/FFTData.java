@@ -1,9 +1,9 @@
 package com.voxxel.visualizer;
 
-public class AudioData {
+public class FFTData {
     public byte[] bytes;
 
-    public AudioData(byte[] bytes) {
+    public FFTData(byte[] bytes) {
         this.bytes = bytes;
     }
 }
