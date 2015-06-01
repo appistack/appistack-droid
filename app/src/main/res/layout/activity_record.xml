@@ -7,6 +7,19 @@
     android:orientation="vertical"
     tools:context="com.voxxel.voxxel.RecordActivity">
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"/>
+
+    </LinearLayout>
+
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
