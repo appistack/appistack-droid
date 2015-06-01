@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.voxxel.visualizer.renderer.OscillatorRenderer;
 import com.voxxel.visualizer.renderer.Renderer;
 
 public class VisualizerView extends View {
@@ -26,9 +27,6 @@ public class VisualizerView extends View {
     private boolean mFlash = false;
     private Bitmap mCanvasBitmap;
     private Canvas mCanvas;
-
-    private Integer sx;
-    private Integer sy;
 
     public VisualizerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -50,9 +48,20 @@ public class VisualizerView extends View {
         mFFTBytes = null;
 
         mFlashPaint.setColor(Color.argb(122, 255, 255, 255));
+        setOscillatorRenderer();
+    }
 
-        sx = getWidth();
-        sy = getHeight();
+    private void setOscillatorRenderer() {
+        Paint paint = new Paint();
+        paint.setStrokeWidth(1f);
+        paint.setAntiAlias(true);
+        paint.setColor(Color.argb(200, 56, 138, 252));
+
+        Paint lineFlashPaint = new Paint();
+        paint.setStrokeWidth(5f);
+        paint.setAntiAlias(true);
+        paint.setColor(Color.argb(188, 255, 255, 255));
+        mRenderer = new OscillatorRenderer(paint, lineFlashPaint, false, true);
     }
 
     public void link(MediaPlayer player) {
@@ -74,7 +83,6 @@ public class VisualizerView extends View {
             }
         };
 
-        Log.i("VIZ MAX CAPTURE RATE", " " + Visualizer.getMaxCaptureRate());
         mVisualizer.setDataCaptureListener(captureListener, Visualizer.getMaxCaptureRate()/2, true, true);
 
         mVisualizer.setEnabled(true);
@@ -104,7 +112,7 @@ public class VisualizerView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        mRect.set(0,0,sx,sy);
+        mRect.set(0,0,canvas.getWidth(), canvas.getHeight());
         if (mCanvasBitmap == null) {
             mCanvasBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
         }
@@ -118,7 +126,9 @@ public class VisualizerView extends View {
             mCanvas.drawPaint(mFlashPaint);
         }
 
-//        canvas.drawLine(0,0,canvas.getWidth(), canvas.getHeight(), mFlashPaint);
+        AudioData audioData = new AudioData(mBytes);
+        mRenderer.render(mCanvas, audioData, mRect);
+
         canvas.drawBitmap(mCanvasBitmap, new Matrix(), null);
     }
 

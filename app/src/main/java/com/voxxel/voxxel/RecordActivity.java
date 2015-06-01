@@ -2,6 +2,7 @@ package com.voxxel.voxxel;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 //import android.support.v7.appcompat.R;
@@ -27,18 +28,24 @@ import com.voxxel.api.AuthManager;
 import com.voxxel.api.ServiceGenerator;
 import com.voxxel.api.SoundModel;
 import com.voxxel.api.SoundService;
+import com.voxxel.visualizer.VisualizerView;
 import com.voxxel.voxxel.R;
 import com.voxxel.Constants;
 
+// https://developer.android.com/guide/topics/media/audio-capture.html
+// https://github.com/kmmbvnr/crydetector/blob/master/CryDetector/src/cc/wthr/crydetector/CryDetector.java
+
 public class RecordActivity extends Activity {
     private MediaPlayer mPlayer;
+    private MediaRecorder mRecorder = null;
     private AudioManager aManager;
     private Long artistId;
     private Long soundId;
     private SoundModel sound = new SoundModel();
-    private AuthManager authManager = AuthManager.getInstance();
-    private AccessTokenModel accessToken = authManager.retrieveToken();
+//    private AuthManager authManager = AuthManager.getInstance();
+//    private AccessTokenModel accessToken = authManager.retrieveToken();
     private SoundService soundService;
+    private VisualizerView mVisualizerView;
 
     private RequestSoundTask soundTask = null;
 
@@ -51,17 +58,48 @@ public class RecordActivity extends Activity {
         artistId = intent.getLongExtra("artistId", -1);
         soundId = intent.getLongExtra("soundId", -1);
 
-        if (!accessToken.isValid()) {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-        } else {
-            soundService = ServiceGenerator.createService(SoundService.class, Constants.BASE_URL, accessToken);
-            fetchSound();
-        }
+        mPlayer = MediaPlayer.create(this, R.raw.get_to_the_choppa);
+        linkRecorder(mRecorder);
 
-//        mPlayer = MediaPlayer.create(this, R.raw.sounds.arnold.get_to_the_choppa);
-//        mPlayer = initMediaPlayer();
-//        aManager = initAudioManager();
+        mVisualizerView = (VisualizerView) findViewById(R.id.visualizerView);
+        mVisualizerView.link(mPlayer);
+
+        mPlayer.setLooping(true);
+        mPlayer.start();
+
+//        if (!accessToken.isValid()) {
+//            Intent loginIntent = new Intent(this, LoginActivity.class);
+//            startActivity(loginIntent);
+//        } else {
+//            soundService = ServiceGenerator.createService(SoundService.class, Constants.BASE_URL, accessToken);
+//            fetchSound();
+//        }
+    }
+
+    private void linkRecorder(MediaRecorder recorder) {
+        unlinkRecorder(recorder);
+        recorder = new MediaRecorder();
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(Constants.RECORDER_AUDIO_OUTPUT);
+        recorder.setAudioEncoder(Constants.RECORDER_AUDIO_ENCODING);
+        recorder.setAudioChannels(1);
+        recorder.setAudioSamplingRate(Constants.RECORDER_AUDIO_SAMPLE_RATE);
+        recorder.setOutputFile("/dev/null");
+
+        try {
+            recorder.prepare();
+            recorder.start();
+        } catch (Throwable ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private void unlinkRecorder(MediaRecorder recorder) {
+        //TODO: when to call this method?
+        if (recorder != null) {
+            recorder.stop();
+            recorder.release();
+        }
     }
 
     private void fetchSound() {
@@ -72,6 +110,32 @@ public class RecordActivity extends Activity {
 
         soundTask = new RequestSoundTask(this.soundId);
         soundTask.execute((Void) null);
+    }
+
+    private void cleanUp() {
+        mVisualizerView.release();
+        mPlayer.release();
+        mRecorder.release();
+//        mRecorder = null;
+//        mPlayer = null;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // re-init media player
+    }
+
+    @Override
+    protected void onPause() {
+        cleanUp();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        cleanUp();
+        super.onDestroy();
     }
 
     @Override
