@@ -70,6 +70,11 @@ public class VisualizerView extends View {
         invalidate();
     }
 
+    public void updateVisualizer(byte[] bytes) {
+        mBytes = bytes;
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
