@@ -2,6 +2,7 @@ package com.voxxel.voxxel;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.voxxel.Constants;
 import com.voxxel.api.AccessTokenModel;
 import com.voxxel.api.AuthManager;
@@ -109,6 +112,25 @@ public class ArtistDetailActivity extends Activity {
 
         textName.setText(artist.getName());
         textDescription.setText(artist.getDescription());
+
+        ImageView imgView = (ImageView) findViewById(R.id.artistImage);
+        Picasso.with(getApplicationContext()).setLoggingEnabled(true);
+        Picasso.with(getApplicationContext()).setIndicatorsEnabled(true);
+
+//        Picasso.Builder builder = new Picasso.Builder(this);
+//        builder.listener(new Picasso.Listener() {
+//            @Override
+//            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception ex) {
+//                ex.printStackTrace();
+//            }
+//        });
+//        Picasso picasso = builder.build();
+
+        Picasso.with(getApplicationContext())
+                .load(artist.getHeadshot())
+//                .placeholder(R.drawable.david_conner)
+                .error(R.drawable.vox_logo)
+                .into(imgView);
     }
 
     public class RequestArtistTask extends AsyncTask<Void, Void, Boolean> {
@@ -147,7 +169,6 @@ public class ArtistDetailActivity extends Activity {
         protected void onCancelled() {
             artistTask = null;
         }
-
     }
 
     public class ArtistSoundListAdapter extends BaseAdapter {
@@ -170,7 +191,7 @@ public class ArtistDetailActivity extends Activity {
 
         @Override
         public long getItemId(int position) {
-            return position;
+            return sounds.get(position).getId();
         }
 
         @Override

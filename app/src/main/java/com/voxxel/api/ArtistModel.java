@@ -1,6 +1,7 @@
 package com.voxxel.api;
 
 import com.google.gson.annotations.SerializedName;
+import com.voxxel.Constants;
 
 import java.util.List;
 
@@ -41,6 +42,6 @@ public class ArtistModel extends BaseResponse {
     }
 
     public String getHeadshot() {
-        return headshot;
+        return Constants.ASSETS_URL + headshot;
     }
 }

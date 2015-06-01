@@ -132,7 +132,7 @@ public class ArtistListActivity extends Activity {
 
         @Override
         public long getItemId(int position) {
-            return position;
+            return artists.get(position).getId();
         }
 
         @Override
