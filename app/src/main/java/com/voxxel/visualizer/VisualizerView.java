@@ -10,14 +10,17 @@ import android.graphics.Matrix;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+
+import com.voxxel.visualizer.renderer.Renderer;
 
 public class VisualizerView extends View {
     private byte[] mBytes;
     private byte[] mFFTBytes;
     private Visualizer mVisualizer;
     private Rect mRect = new Rect();
-    //private Renderer mRenderer;
+    private Renderer mRenderer;
 
     private Paint mFlashPaint = new Paint();
     private boolean mFlash = false;
@@ -58,7 +61,29 @@ public class VisualizerView extends View {
         }
 
         mVisualizer = new Visualizer(player.getAudioSessionId());
-        mVisualizer.setCaptureSize(player.getAudioSessionId());
+        mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
+
+        Visualizer.OnDataCaptureListener captureListener = new Visualizer.OnDataCaptureListener() {
+            @Override
+            public void onWaveFormDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {
+                updateVisualizer(bytes);
+            }
+            @Override
+            public void onFftDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {
+                updateVisualizer(bytes);
+            }
+        };
+
+        Log.i("VIZ MAX CAPTURE RATE", " " + Visualizer.getMaxCaptureRate());
+        mVisualizer.setDataCaptureListener(captureListener, Visualizer.getMaxCaptureRate()/2, true, true);
+
+        mVisualizer.setEnabled(true);
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mVisualizer.setEnabled(false);
+            }
+        });
     }
 
     public void release() {
@@ -93,8 +118,8 @@ public class VisualizerView extends View {
             mCanvas.drawPaint(mFlashPaint);
         }
 
-        canvas.drawLine(0,0,canvas.getWidth(), canvas.getHeight(), mFlashPaint);
-//        canvas.drawBitmap(mCanvasBitmap, new Matrix(), null);
+//        canvas.drawLine(0,0,canvas.getWidth(), canvas.getHeight(), mFlashPaint);
+        canvas.drawBitmap(mCanvasBitmap, new Matrix(), null);
     }
 
 }
