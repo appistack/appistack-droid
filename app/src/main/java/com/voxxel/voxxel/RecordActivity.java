@@ -35,6 +35,14 @@ import com.voxxel.Constants;
 // https://developer.android.com/guide/topics/media/audio-capture.html
 // https://github.com/kmmbvnr/crydetector/blob/master/CryDetector/src/cc/wthr/crydetector/CryDetector.java
 
+// https://stackoverflow.com/questions/29173651/visualize-while-recording-using-audiorecord-and-visualizer-in-android-studio
+// https://stackoverflow.com/questions/20968119/i-cant-see-visualizer-while-recording-voice-on-android
+// https://github.com/steelkiwi/AndroidRecording
+// https://gist.github.com/luisdelarosa/9107008
+// https://stackoverflow.com/questions/8499042/android-audiorecord-example
+// https://stackoverflow.com/questions/15955958/android-audiorecord-to-server-over-udp-playback-issues
+// https://stackoverflow.com/questions/26430647/how-to-enable-audio-recording-in-android-emulator
+
 public class RecordActivity extends Activity {
     private MediaPlayer mPlayer;
     private MediaRecorder mRecorder = null;
