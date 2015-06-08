@@ -10,4 +10,6 @@ public class Constants {
     public final static int RECORDER_AUDIO_OUTPUT = MediaRecorder.AudioEncoder.DEFAULT;
     public final static int RECORDER_AUDIO_ENCODING = MediaRecorder.AudioEncoder.DEFAULT;
     public final static int RECORDER_AUDIO_SAMPLE_RATE = 8000;
+    public final static int RECORDER_AUDIO_MONO = 1;
+
 }
