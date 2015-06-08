@@ -2,6 +2,7 @@ package com.voxxel.voxxel;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -42,10 +43,16 @@ import com.voxxel.Constants;
 // https://stackoverflow.com/questions/8499042/android-audiorecord-example
 // https://stackoverflow.com/questions/15955958/android-audiorecord-to-server-over-udp-playback-issues
 // https://stackoverflow.com/questions/26430647/how-to-enable-audio-recording-in-android-emulator
+// https://github.com/superpoweredSDK/Low-Latency-Android-Audio-iOS-Audio-Engine
+// http://superpowered.com/docs/
+
+// iOS: AVAudioEngine AVAudioPlayer ABPlayer OpenAL AudioQueue CoreAudio w/ Remote IO
+// iOS OSS: TheAmazingAudioEngine, Novocaine, AudioKitv
+
 
 public class RecordActivity extends Activity {
     private MediaPlayer mPlayer;
-    private MediaRecorder mRecorder = null;
+    private MediaRecorder mRecorder;
     private AudioManager aManager;
     private Long artistId;
     private Long soundId;
@@ -55,7 +62,10 @@ public class RecordActivity extends Activity {
     private SoundService soundService;
     private VisualizerView mVisualizerView;
 
-    private RequestSoundTask soundTask = null;
+    private RequestSoundTask soundTask;
+
+    private AudioRecord aRecorder;
+    private int bufferSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +77,11 @@ public class RecordActivity extends Activity {
         soundId = intent.getLongExtra("soundId", -1);
 
         mPlayer = MediaPlayer.create(this, R.raw.get_to_the_choppa);
-        linkRecorder(mRecorder);
+//        linkRecorder(mRecorder);
+
+        bufferSize = AudioRecord.getMinBufferSize(Constants.RECORDER_AUDIO_SAMPLE_RATE,
+                Constants.RECORDER_AUDIO_MONO, Constants.RECORDER_AUDIO_ENCODING);
+//        startRecording(aRecorder);
 
         mVisualizerView = (VisualizerView) findViewById(R.id.visualizerView);
         mVisualizerView.link(mPlayer);
@@ -84,13 +98,23 @@ public class RecordActivity extends Activity {
 //        }
     }
 
+    private int bufferElementsToRec = 1024;
+    private int bytesPerElement = 2;
+    private boolean isRecording = false;
+    private void startRecording(AudioRecord recorder) {
+        recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, Constants.RECORDER_AUDIO_SAMPLE_RATE,
+                Constants.RECORDER_AUDIO_MONO, Constants.RECORDER_AUDIO_ENCODING, (bufferElementsToRec * bytesPerElement));
+        recorder.startRecording();
+        isRecording = true;
+    }
+
     private void linkRecorder(MediaRecorder recorder) {
         unlinkRecorder(recorder);
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(Constants.RECORDER_AUDIO_OUTPUT);
         recorder.setAudioEncoder(Constants.RECORDER_AUDIO_ENCODING);
-        recorder.setAudioChannels(1);
+        recorder.setAudioChannels(Constants.RECORDER_AUDIO_MONO);
         recorder.setAudioSamplingRate(Constants.RECORDER_AUDIO_SAMPLE_RATE);
         recorder.setOutputFile("/dev/null");
 

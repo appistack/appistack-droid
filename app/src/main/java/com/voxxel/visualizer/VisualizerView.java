@@ -53,7 +53,7 @@ public class VisualizerView extends View {
 
     private void setOscillatorRenderer() {
         Paint paint = new Paint();
-        paint.setStrokeWidth(1f);
+        paint.setStrokeWidth(0.5f);
         paint.setAntiAlias(true);
         paint.setColor(Color.argb(200, 56, 138, 252));
 
