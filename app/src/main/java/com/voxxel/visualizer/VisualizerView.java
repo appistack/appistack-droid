@@ -79,7 +79,7 @@ public class VisualizerView extends View {
             }
             @Override
             public void onFftDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {
-                updateVisualizer(bytes);
+                updateVisualizerFFT(bytes);
             }
         };
 
