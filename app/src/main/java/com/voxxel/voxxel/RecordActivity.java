@@ -57,8 +57,8 @@ public class RecordActivity extends Activity {
     private Long artistId;
     private Long soundId;
     private SoundModel sound = new SoundModel();
-//    private AuthManager authManager = AuthManager.getInstance();
-//    private AccessTokenModel accessToken = authManager.retrieveToken();
+    private AuthManager authManager = AuthManager.getInstance();
+    private AccessTokenModel accessToken = authManager.retrieveToken();
     private SoundService soundService;
     private VisualizerView mVisualizerView;
 
@@ -86,16 +86,16 @@ public class RecordActivity extends Activity {
         mVisualizerView = (VisualizerView) findViewById(R.id.visualizerView);
         mVisualizerView.link(mPlayer);
 
-        mPlayer.setLooping(true);
+        mPlayer.setLooping(true); // must loop for now bc renderer doesn't handle null data
         mPlayer.start();
 
-//        if (!accessToken.isValid()) {
-//            Intent loginIntent = new Intent(this, LoginActivity.class);
-//            startActivity(loginIntent);
-//        } else {
-//            soundService = ServiceGenerator.createService(SoundService.class, Constants.BASE_URL, accessToken);
-//            fetchSound();
-//        }
+        if (!accessToken.isValid()) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+        } else {
+            soundService = ServiceGenerator.createService(SoundService.class, Constants.BASE_URL, accessToken);
+            fetchSound();
+        }
     }
 
     private int bufferElementsToRec = 1024;
