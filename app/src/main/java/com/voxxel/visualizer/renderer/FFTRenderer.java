@@ -45,15 +45,19 @@ public class FFTRenderer extends Renderer {
 
         canvas.drawColor(Color.BLACK); // clear and draw
 
-        float numBytes = data.bytes.length - 1;
-        for (int i = 0; i < numBytes; i++) {
-            byte rfk = data.bytes[i];
-            byte ifk = data.bytes[i + 1];
+        float numBytes = data.bytes.length;
+        float numSamples = numBytes/2 - 1;
+
+        for (int i = 0; i < numSamples; i++) {
+            byte rfk = data.bytes[i*2];
+            byte ifk = data.bytes[i*2 + 1];
+
             float magnitude = (rfk * rfk + ifk * ifk);
             float dbValue = (float) (10 * Math.log10(magnitude));
 
-            mFFTPoints[i*4] = rect.width() * i/numBytes;
-            mFFTPoints[i*4+2] = rect.width() * (i+1) / numBytes;
+            mFFTPoints[i*4] = rect.width() * i/numSamples;
+            mFFTPoints[i*4+2] = rect.width() * (i+1) / numSamples;
+
             mFFTPoints[i*4 + 1] = rect.height();
             mFFTPoints[i*4 + 3] = rect.height() - (dbValue * 2 - 10) * 10;
         }
