@@ -19,6 +19,8 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.media.MediaPlayer;
 import android.media.AudioManager;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,10 +59,11 @@ public class RecordActivity extends Activity {
     private Long artistId;
     private Long soundId;
     private SoundModel sound = new SoundModel();
-    private AuthManager authManager = AuthManager.getInstance();
-    private AccessTokenModel accessToken = authManager.retrieveToken();
+//    private AuthManager authManager = AuthManager.getInstance();
+//    private AccessTokenModel accessToken = authManager.retrieveToken();
     private SoundService soundService;
     private VisualizerView mVisualizerView;
+    private Switch mRendererSwitch;
 
     private RequestSoundTask soundTask;
 
@@ -83,19 +86,27 @@ public class RecordActivity extends Activity {
                 Constants.RECORDER_AUDIO_MONO, Constants.RECORDER_AUDIO_ENCODING);
 //        startRecording(aRecorder);
 
+        mPlayer.setLooping(true);
+        mPlayer.start();
+
         mVisualizerView = (VisualizerView) findViewById(R.id.visualizerView);
         mVisualizerView.link(mPlayer);
 
-        mPlayer.setLooping(true); // must loop for now bc renderer doesn't handle null data
-        mPlayer.start();
+        mRendererSwitch = (Switch) findViewById(R.id.rendererSwitch);
+        mRendererSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mVisualizerView.renderFFT = isChecked;
+            }
+        });
 
-        if (!accessToken.isValid()) {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-        } else {
-            soundService = ServiceGenerator.createService(SoundService.class, Constants.BASE_URL, accessToken);
-            fetchSound();
-        }
+//        if (!accessToken.isValid()) {
+//            Intent loginIntent = new Intent(this, LoginActivity.class);
+//            startActivity(loginIntent);
+//        } else {
+//            soundService = ServiceGenerator.createService(SoundService.class, Constants.BASE_URL, accessToken);
+//            fetchSound();
+//        }
     }
 
     private int bufferElementsToRec = 1024;

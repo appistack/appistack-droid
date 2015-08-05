@@ -29,6 +29,15 @@
             android:id="@+id/visualizerView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>
+
+        <Switch
+            android:id="@+id/rendererSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Render FFT"
+            android:layout_gravity="right|top"
+            android:checked="false"
+            android:textColor="#ffffffff"/>
     </FrameLayout>
 
     <LinearLayout
