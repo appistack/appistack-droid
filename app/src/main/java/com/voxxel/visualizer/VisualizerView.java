@@ -73,7 +73,7 @@ public class VisualizerView extends View {
 
     private void setFFTRenderer() {
         Paint paint = new Paint();
-        paint.setStrokeWidth(2.0f);
+        paint.setStrokeWidth(4.0f);
         paint.setAntiAlias(true);
         paint.setColor(Color.argb(200, 56, 138, 252));
 
@@ -147,6 +147,7 @@ public class VisualizerView extends View {
             mCanvas.drawPaint(mFlashPaint);
         }
 
+        //TODO: apparently I should preallocate these byte[]'s since their length won't change
         AudioData audioData = new AudioData(mBytes);
         FFTData fftData = new FFTData(mFFTBytes);
 
