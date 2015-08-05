@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.voxxel.visualizer.AudioData;
 import com.voxxel.visualizer.FFTData;
@@ -44,10 +43,10 @@ public class OscillatorRenderer extends Renderer {
         float accumulator = 0;
         float numBytes = data.bytes.length - 1;
         for (int i = 0; i < numBytes; i++) {
-            mPoints[i*4] = rect.width() * i/numBytes;
-            mPoints[i*4+2] = rect.width() * (i+1) / numBytes;
-            mPoints[i*4+1] = rect.height()/2f + (data.bytes[i] * (rect.height() / 2f) / 128f);
-            mPoints[i*4+3] = rect.height()/2f + (data.bytes[i+1] * (rect.height() / 2f) / 128f);
+            mPoints[i*4] = rect.width() * (i/numBytes);
+            mPoints[i*4+1] = rect.height()/2 + ((byte) (data.bytes[i] + 128)) * (rect.height() / 3) / 128;
+            mPoints[i*4+2] = rect.width() * ((i+1) / numBytes);
+            mPoints[i*4+3] = rect.height()/2 + ((byte) (data.bytes[i+1] + 128)) * (rect.height() / 3) / 128;
             accumulator += Math.abs(data.bytes[i]);
         }
 
