@@ -147,7 +147,7 @@ public class RecordActivity extends Activity {
     private void cleanUp() {
         mVisualizerView.release();
         mPlayer.release();
-        mRecorder.release();
+//        mRecorder.release();
 //        mRecorder = null;
 //        mPlayer = null;
     }
