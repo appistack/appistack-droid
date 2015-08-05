@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.voxxel.visualizer.renderer.FFTRenderer;
 import com.voxxel.visualizer.renderer.OscillatorRenderer;
 import com.voxxel.visualizer.renderer.Renderer;
 
@@ -21,12 +22,15 @@ public class VisualizerView extends View {
     private byte[] mFFTBytes;
     private Visualizer mVisualizer;
     private Rect mRect = new Rect();
-    private Renderer mRenderer;
+
+    private OscillatorRenderer oscillatorRenderer;
+    private FFTRenderer fftRenderer;
 
     private Paint mFlashPaint = new Paint();
     private boolean mFlash = false;
     private Bitmap mCanvasBitmap;
     private Canvas mCanvas;
+    public boolean renderFFT = false;
 
     public VisualizerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -44,24 +48,36 @@ public class VisualizerView extends View {
     }
 
     private void init() {
-        mBytes = null;
-        mFFTBytes = null;
+        mBytes = new byte[0];
+        mFFTBytes = new byte[0];
 
         mFlashPaint.setColor(Color.argb(122, 255, 255, 255));
+
         setOscillatorRenderer();
+        setFFTRenderer();
     }
 
     private void setOscillatorRenderer() {
         Paint paint = new Paint();
-        paint.setStrokeWidth(0.5f);
+        paint.setStrokeWidth(4.0f);
         paint.setAntiAlias(true);
         paint.setColor(Color.argb(200, 56, 138, 252));
 
+        //TODO: fix flash animation - it doesn't draw this color
         Paint lineFlashPaint = new Paint();
-        paint.setStrokeWidth(5f);
+        paint.setStrokeWidth(8f);
         paint.setAntiAlias(true);
-        paint.setColor(Color.argb(188, 255, 255, 255));
-        mRenderer = new OscillatorRenderer(paint, lineFlashPaint, false, true);
+        paint.setColor(Color.argb(188, 254, 254, 254));
+        oscillatorRenderer = new OscillatorRenderer(paint, lineFlashPaint, false, true);
+    }
+
+    private void setFFTRenderer() {
+        Paint paint = new Paint();
+        paint.setStrokeWidth(2.0f);
+        paint.setAntiAlias(true);
+        paint.setColor(Color.argb(200, 56, 138, 252));
+
+        fftRenderer = new FFTRenderer(paint, true);
     }
 
     public void link(MediaPlayer player) {
@@ -108,6 +124,11 @@ public class VisualizerView extends View {
         invalidate();
     }
 
+    public void updateVisualizerFFT(byte[] bytes) {
+        mFFTBytes = bytes;
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -127,7 +148,13 @@ public class VisualizerView extends View {
         }
 
         AudioData audioData = new AudioData(mBytes);
-        mRenderer.render(mCanvas, audioData, mRect);
+        FFTData fftData = new FFTData(mFFTBytes);
+
+        if (renderFFT) {
+            fftRenderer.render(mCanvas, fftData, mRect);
+        } else {
+            oscillatorRenderer.render(mCanvas, audioData, mRect);
+        }
 
         canvas.drawBitmap(mCanvasBitmap, new Matrix(), null);
     }
