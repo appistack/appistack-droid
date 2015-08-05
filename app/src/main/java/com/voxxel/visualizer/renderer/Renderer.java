@@ -27,7 +27,7 @@ abstract public class Renderer {
     }
 
     final public void render(Canvas canvas, FFTData data, Rect rect) {
-        if (mPoints == null || mFFTPoints.length < data.bytes.length * 4) {
+        if (mFFTPoints == null || mFFTPoints.length < data.bytes.length * 4) {
             mFFTPoints = new float[data.bytes.length * 4];
         }
 
