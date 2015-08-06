@@ -5,7 +5,7 @@ import android.media.MediaRecorder;
 
 public class Constants {
     public final static String BASE_URL = "http://192.168.1.80:3000";
-    public final static String ASSETS_URL = "http://vox.xel.io";
+    public final static String ASSETS_URL = "http://appistack.com";
     public final static String SIGNUP_CONFIRM_SUCCESS_URL = BASE_URL;
     public final static String PASSWORD_RESET_SUCCESS_URL = BASE_URL + "/password/change";
 
