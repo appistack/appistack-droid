@@ -2,6 +2,9 @@
 
 An Android soundboard app with Waveform and FFT audion Visualizers. Set up to work with Appistack Rails. Includes Login/Signup.
 
+Not really sure if this repo is clean enough to be used as a template
+for android, but there are a lot of great examples in here.
+
 ### Configuring For Multiple Environments
 
 #### 1) Configure DNS For Your API
